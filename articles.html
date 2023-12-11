@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header, main, footer {
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        main {
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 1.5em;
+        }
+
+        .article-link {
+            text-decoration: none;
+            color: #fff;
+            display: block;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .article-link:hover {
+            background-color: #464646;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Relevant Articles</h1>
+    </header>
+    <main>
+        <div id="articles"></div>
+    </main>
+    <footer>
+        <p>ITP 207 Final Project 2023</p>
+    </footer>
+    <script>
+        // Extract country name from URL parameter
+        const searchParams = new URLSearchParams(window.location.search);
+        const countryName = searchParams.get('country');
+
+        // Map between country names and their News API country codes
+        const countryCodes = {
+            'United States': 'us',
+            'United Kingdom': 'gb',
+            'Canada': 'ca',
+            'Australia': 'au',
+            'India': 'in',
+            'Germany': 'de',
+            'France': 'fr',
+            'Italy': 'it',
+            'Spain': 'es',
+            'Brazil': 'br',
+            'Japan': 'jp',
+            'South Korea': 'kr',
+            'China': 'cn',
+            'Russia': 'ru',
+            'Mexico': 'mx',
+            'South Africa': 'za',
+            'Nigeria': 'ng',
+            'Kenya': 'ke',
+            'Argentina': 'ar',
+            'Turkey': 'tr',
+            'Indonesia': 'id',
+            'Saudi Arabia': 'sa',
+            'Egypt': 'eg',
+            'Vietnam': 'vn',
+            'Thailand': 'th',
+            'Singapore': 'sg',
+            'Malaysia': 'my',
+            'New Zealand': 'nz',
+            'Sweden': 'se',
+            'Norway': 'no',
+            'Netherlands': 'nl',
+            'Belgium': 'be',
+            'Switzerland': 'ch',
+            'Portugal': 'pt',
+            'Ireland': 'ie',
+            'Austria': 'at',
+            'Poland': 'pl',
+            'Hungary': 'hu',
+            'Czech Republic': 'cz',
+            'Greece': 'gr',
+            'Denmark': 'dk',
+            'Finland': 'fi',
+            'Israel': 'il',
+            'United Arab Emirates': 'ae',
+            'South Korea': 'kr',
+            'Malta': 'mt',
+            'Cyprus': 'cy',
+            'Qatar': 'qa',
+            'Kuwait': 'kw',
+            'Oman': 'om',
+            'Bahrain': 'bh',
+            'Lebanon': 'lb',
+            'Jordan': 'jo',
+            'Iraq': 'iq',
+            'Iran': 'ir',
+            'Pakistan': 'pk',
+            'Afghanistan': 'af',
+            'Bangladesh': 'bd',
+            'Sri Lanka': 'lk',
+            'Nepal': 'np',
+            'Bhutan': 'bt',
+            'Myanmar': 'mm',
+            'Maldives': 'mv',
+            'Cambodia': 'kh',
+            'Philippines': 'ph',
+            'Brunei': 'bn',
+            'Timor-Leste': 'tl',
+            'Mongolia': 'mn',
+            'North Korea': 'kp',
+            'Laos': 'la',
+            'Fiji': 'fj',
+            'Tonga': 'to',
+            'Samoa': 'ws',
+            'Papua New Guinea': 'pg',
+            'Solomon Islands': 'sb',
+            'Vanuatu': 'vu',
+            'Kiribati': 'ki',
+            'Tuvalu': 'tv',
+            'Micronesia': 'fm',
+            'Marshall Islands': 'mh',
+            'Palau': 'pw',
+            'Nauru': 'nr',
+        };
+
+        // Fetch articles from News API based on the country code
+        const countryCode = countryCodes[countryName] || 'us';
+        fetch(`https://newsapi.org/v2/top-headlines?country=${countryCode}&apiKey=91f2406093bc426d9c68d33532d4a811`)
+            .then(response => response.json())
+            .then(data => {
+                const articlesContainer = document.getElementById('articles');
+                articlesContainer.innerHTML = '';
+
+                if (data.articles.length > 0) {
+                    data.articles.forEach(article => {
+                        const articleElement = document.createElement('div');
+                        articleElement.innerHTML = `
+                            <a href="${article.url}" class="article-link">
+                                <h2>${article.title}</h2>
+                                <img src="${article.urlToImage}" alt="${article.title}">
+                                <p>${article.description}</p>
+                            </a>
+                        `;
+                        articlesContainer.appendChild(articleElement);
+                    });
+                } else {
+                    articlesContainer.innerHTML = '<p>No articles found for this country</p>';
+                }
+            })
+            .catch(error => console.error('Error fetching articles:', error));
+    </script>
+</body>
+</html>
